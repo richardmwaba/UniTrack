@@ -4,6 +4,8 @@ import 'rxjs/add/operator/map';
 import { BackgroundGeolocation} from '@ionic-native/background-geolocation';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import 'rxjs/add/operator/filter';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import {timestamp} from "rxjs/operator/timestamp";
 
 /*
   Generated class for the LocationTrackerProvider provider.
@@ -17,9 +19,12 @@ export class LocationTrackerProvider {
   public watch: any;
   public lat: number = 0;
   public lng: number = 0;
+  public timestamp: number = 0;
+  targetList: FirebaseListObservable<any[]>;
 
-  constructor(public zone: NgZone, private backgroundGeolocation: BackgroundGeolocation, private geolocation: Geolocation) {
+  constructor(public zone: NgZone, afDB: AngularFireDatabase,private backgroundGeolocation: BackgroundGeolocation, private geolocation: Geolocation) {
     console.log('Hello LocationTrackerProvider Provider');
+    this.targetList = afDB.list('/targets');
 
   }
 
@@ -42,6 +47,7 @@ export class LocationTrackerProvider {
       this.zone.run(() => {
         this.lat = location.latitude;
         this.lng = location.longitude;
+        this.timestamp = location.timestamp;
       });
 
     }, (err) => {
@@ -69,9 +75,15 @@ export class LocationTrackerProvider {
       this.zone.run(() => {
         this.lat = position.coords.latitude;
         this.lng = position.coords.longitude;
+        this.timestamp = position.timestamp;
+        //Call to save method that saves to firebase
+        this.savePosition(this.lat,this.lng,this.timestamp);
       });
 
+
     });
+
+
 
   }
 
@@ -82,6 +94,17 @@ export class LocationTrackerProvider {
     this.backgroundGeolocation.finish();
     this.watch.unsubscribe();
 
+  }
+
+  //Saving to Firebase
+  savePosition(latitude, longitude, timestamp) {
+    this.targetList.push({
+      latitude: latitude,
+      longitude: longitude,
+      timestamp: timestamp,
+    }).then( error => {
+      console.log(error);
+    });
   }
 
 }
