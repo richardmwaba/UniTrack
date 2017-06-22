@@ -10,6 +10,20 @@ import { LocationTrackerProvider } from '../providers/location-tracker/location-
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 import { Geolocation } from '@ionic-native/geolocation';
 
+import {AngularFireDatabaseModule} from 'angularfire2/database';
+import { AngularFireModule } from 'angularfire2';
+//import { AngularFireAuthModule } from 'angularfire2/auth';
+
+
+export const firebaseConfig = {
+  apiKey: "AIzaSyBVujRzh16eLZq5zceOl53B6O8QS6mUbdY",
+  authDomain: "devicetracker-31792.firebaseapp.com",
+  databaseURL: "https://devicetracker-31792.firebaseio.com",
+  projectId: "devicetracker-31792",
+  storageBucket: "devicetracker-31792.appspot.com",
+  messagingSenderId: "799447247436"
+};
+
 @NgModule({
   declarations: [
     MyApp,
@@ -17,7 +31,10 @@ import { Geolocation } from '@ionic-native/geolocation';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireDatabaseModule,
+    //AngularFireAuthModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
