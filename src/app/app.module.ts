@@ -3,7 +3,8 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-
+import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
+import {Component} from '@angular/core';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { LocationTrackerProvider } from '../providers/location-tracker/location-tracker';
@@ -14,6 +15,24 @@ import {AngularFireDatabaseModule} from 'angularfire2/database';
 import { AngularFireModule } from 'angularfire2';
 //import { AngularFireAuthModule } from 'angularfire2/auth';
 
+const cloudSettings: CloudSettings = {
+  'core': {
+    'app_id': '71c0b098'
+  },
+
+  'push': {
+    'sender_id': '799447247436',
+    'pluginConfig': {
+      'ios': {
+        'badge': true,
+        'sound': true
+      },
+      'android': {
+        'iconColor': '#343434'
+      }
+    }
+  }
+};
 
 export const firebaseConfig = {
   apiKey: "AIzaSyBVujRzh16eLZq5zceOl53B6O8QS6mUbdY",
@@ -34,6 +53,7 @@ export const firebaseConfig = {
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule,
+    CloudModule.forRoot(cloudSettings)
     //AngularFireAuthModule
   ],
   bootstrap: [IonicApp],
