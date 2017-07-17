@@ -7,13 +7,15 @@ import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
 import {Component} from '@angular/core';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import { LoginPage} from '../pages/login/login';
+import { RegisterPage} from '../pages/register/register';
 import { LocationTrackerProvider } from '../providers/location-tracker/location-tracker';
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 import { Geolocation } from '@ionic-native/geolocation';
 
 import {AngularFireDatabaseModule} from 'angularfire2/database';
 import { AngularFireModule } from 'angularfire2';
-//import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireAuthModule } from 'angularfire2/auth';
 
 const cloudSettings: CloudSettings = {
   'core': {
@@ -46,20 +48,25 @@ export const firebaseConfig = {
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    HomePage,
+    LoginPage,
+    RegisterPage
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule,
-    CloudModule.forRoot(cloudSettings)
+    CloudModule.forRoot(cloudSettings),
     //AngularFireAuthModule
+    AngularFireAuthModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    HomePage,
+    LoginPage,
+    RegisterPage
   ],
   providers: [
     BackgroundGeolocation,

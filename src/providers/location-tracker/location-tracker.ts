@@ -5,7 +5,7 @@ import { BackgroundGeolocation} from '@ionic-native/background-geolocation';
 import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import 'rxjs/add/operator/filter';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
-import {timestamp} from "rxjs/operator/timestamp";
+//import {timestamp} from "rxjs/operator/timestamp";
 
 /*
   Generated class for the LocationTrackerProvider provider.
@@ -24,7 +24,7 @@ export class LocationTrackerProvider {
 
   constructor(public zone: NgZone, afDB: AngularFireDatabase,private backgroundGeolocation: BackgroundGeolocation, private geolocation: Geolocation) {
     console.log('Hello LocationTrackerProvider Provider');
-    this.targetList = afDB.list('/targets');
+    this.targetList = afDB.list('/devices');
 
   }
 
@@ -36,7 +36,7 @@ export class LocationTrackerProvider {
       stationaryRadius: 20,
       distanceFilter: 10,
       debug: true,
-      interval: 2000
+      interval: 50000
     };
 
     this.backgroundGeolocation.configure(config).subscribe((location) => {
@@ -63,7 +63,7 @@ export class LocationTrackerProvider {
     // Foreground Tracking
 
     let options = {
-      frequency: 3000,
+      frequency: 50000,
       enableHighAccuracy: true
     };
 

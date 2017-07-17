@@ -5,11 +5,13 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HomePage } from '../pages/home/home';
 import {Component} from '@angular/core';
 import {Push, PushToken} from '@ionic/cloud-angular';
+
+import { LoginPage} from '../pages/login/login';
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
-  rootPage:any = HomePage;
+  rootPage:any = LoginPage;
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen,public push: Push) {
     platform.ready().then(() => {
@@ -20,4 +22,3 @@ export class MyApp {
     });
   }
 }
-
