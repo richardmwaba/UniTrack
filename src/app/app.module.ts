@@ -6,15 +6,19 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { LoginPage} from '../pages/login/login';
+import { LoginPageModule} from '../pages/login/login.module';
 import { RegisterPage} from '../pages/register/register';
+import { ResetPasswordPageModule } from '../pages/reset-password/reset-password.module';
+import { NotificationsPage } from '../pages/notifications/notifications';
 import { LocationTrackerProvider } from '../providers/location-tracker/location-tracker';
 import { BackgroundGeolocation } from '@ionic-native/background-geolocation';
 import { Geolocation } from '@ionic-native/geolocation';
+import { GoogleMaps, GoogleMap, GoogleMapsEvent, LatLng, CameraPosition, MarkerOptions, Marker } from '@ionic-native/google-maps';
 
 import {AngularFireDatabaseModule} from 'angularfire2/database';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AuthProvider } from '../providers/auth/auth';
 
 
 export const firebaseConfig = {
@@ -30,30 +34,35 @@ export const firebaseConfig = {
   declarations: [
     MyApp,
     HomePage,
-    LoginPage,
-    RegisterPage
+    RegisterPage,
+    NotificationsPage,
   ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule,
+    LoginPageModule,
+    ResetPasswordPageModule,
     AngularFireAuthModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
     HomePage,
-    LoginPage,
-    RegisterPage
+    RegisterPage,
+    NotificationsPage,
   ],
   providers: [
     BackgroundGeolocation,
+    GoogleMaps,
     Geolocation,
     StatusBar,
+    AuthProvider,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    LocationTrackerProvider
+    LocationTrackerProvider, Geolocation, GoogleMaps,
+    AuthProvider
   ]
 })
 export class AppModule {}

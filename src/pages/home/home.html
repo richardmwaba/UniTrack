@@ -1,19 +1,48 @@
-<ion-content>
-</ion-content>
+<ion-menu persistent="true" [content]="mycontent">
+  <ion-header class="menu-title">
+    <ion-toolbar>
+      <ion-title style="text-align: center">UniTrack</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content padding>
+    <ion-item class="profile-image">
+      <img src="assets/img/avatar.png" alt="background image"/>
+      <p>{{userEmail}}</p>
+    </ion-item>
+    <ion-list no-lines>
+      <button ion-item (click)="home()">
+        <ion-icon ios="ios-home" md="md-home"></ion-icon>
+        Home
+      </button>
+      <button ion-item (click)="notifications()">
+        <ion-icon ios="ios-notifications-outline" md="md-notifications-outline"></ion-icon>
+        Notifications
+      </button>
+      <button ion-item (click)="logoutUser()">
+        <ion-icon ios="ios-log-out" md="md-log-out"></ion-icon>
+        Sign Out
+      </button>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<ion-nav #mycontent swipeBackEnabled="false" [root]="rootPage"></ion-nav>
 
 <ion-header>
   <ion-navbar>
     <button ion-button menuToggle>
       <ion-icon color="primary" name="menu"></ion-icon>
     </button>
-    <ion-title class="page-title">UniTrack</ion-title>
+    <ion-title class="">Home</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <h3>Current Latitude: {{locationTracker.lat}}</h3>
+  <div #map id="map"></div>
+  <!-- <h3>Current Latitude: {{locationTracker.lat}}</h3>
   <h3>Current Longitude: {{locationTracker.lng}}</h3>
-  <h3>Time: {{locationTracker.timestamp}}</h3>
+  <h3>Time: {{locationTracker.timestamp}}</h3> -->
+  <button ion-button full (click)="getLocation()">Get the Location</button>
   <button ion-button full primary (click)="start()">Start Tracking</button>
   <button ion-button full primary (click)="stop()">Stop Tracking</button>
 

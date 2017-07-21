@@ -1,0 +1,36 @@
+import { LoadingController } from 'ionic-angular';
+import { Injectable } from '@angular/core';
+import { AngularFireAuth } from 'angularfire2/auth';
+//import { User } from '../../models/user';
+import firebase from 'firebase/app';
+
+@Injectable()
+export class AuthProvider {
+
+  constructor(public afAuth: AngularFireAuth, public loadingCtrl: LoadingController) {
+  }
+
+  loginUser(newEmail: string, newPassword: string): firebase.Promise<any> {
+    return this.afAuth.auth.signInWithEmailAndPassword(newEmail, newPassword);
+  }
+
+  resetPassword(email: string): firebase.Promise<any> {
+    return this.afAuth.auth.sendPasswordResetEmail(email);
+  }
+
+  logoutUser(): firebase.Promise<any> {
+    return this.afAuth.auth.signOut();
+  }
+
+  registerUser(newEmail: string, newPassword: string): firebase.Promise<any> {
+    return this.afAuth.auth.createUserWithEmailAndPassword(newEmail, newPassword);
+  }
+
+  presentLoading() {
+    let loader = this.loadingCtrl.create({
+      content: "Please wait...",
+      duration: 3000
+    });
+    loader.present();
+  }
+}

@@ -1,9 +1,5 @@
 page-login {
 
-  .grad-icon{
-    font-size: 110px;
-    color: #0a9ec7;
-  }
   .app-name{
     color: #0a9ec7;
     padding-bottom: 20px;
@@ -23,5 +19,24 @@ page-login {
   }
   .social-icon{
     font-size: 35px;
+  }
+
+  p {
+    font-size: 0.8em;
+    color: #d2d2d2;
+  }
+
+  .invalid {
+    border-bottom: 1px solid #FF6153;
+  }
+
+  .error-message .item-inner {
+    border-bottom: 0 !important;
+  }
+
+  .login-button{
+    padding-top: 45px;
+    align-items: center;
+    align-content: center;
   }
 }
