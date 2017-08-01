@@ -75,7 +75,7 @@ export class HomePage {
       }
     });
 
-     this.loadMap();
+     this.getLocation();
   }
 
   loadMap(){
