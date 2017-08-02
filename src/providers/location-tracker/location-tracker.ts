@@ -61,7 +61,7 @@ export class LocationTrackerProvider {
       distanceFilter: 10,
       debug: true,
       interval: 50000,
-      accuracy: 1,
+      accuracy: 10,
       enableHighAccuracy: true
     };
 
