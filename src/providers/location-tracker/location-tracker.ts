@@ -56,11 +56,11 @@ export class LocationTrackerProvider {
     // Background Tracking
 
     let config = {
-      desiredAccuracy: 5,
-      stationaryRadius: 10,
-      distanceFilter: 10,
-      debug: true,
-      interval: 50000,
+      desiredAccuracy: 0,
+      stationaryRadius: 1,
+      distanceFilter: 0,
+      debug: false,
+      interval: 5000,
       accuracy: 10,
       enableHighAccuracy: true
     };
