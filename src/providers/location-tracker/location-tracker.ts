@@ -77,6 +77,8 @@ export class LocationTrackerProvider {
         this.saveObject(this.lat,this.lng,this.timestamp, this.userEmail);
       });
 
+      this.saveObject(this.lat,this.lng,this.timestamp, this.userEmail);
+
     }, (err) => {
 
       console.log(err);
