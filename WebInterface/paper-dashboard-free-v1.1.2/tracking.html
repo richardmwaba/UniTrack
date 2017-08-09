@@ -112,6 +112,7 @@
                                 <li><a href="#">Notification 3</a></li>
                                 <li><a href="#">Notification 4</a></li>
                                 <li><a href="#">Another notification</a></li>
+                                <li><button id="logoutBtn" class="btn btn-link" data-toggle="modal" data-target="#logout">Logout</button></li>
                               </ul>
                         </li>
 						<li>
@@ -284,12 +285,191 @@
     </div>
 </div>
 
+<!--modal-->
+<div class="modal fade" id="logout" role="dialog">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button id="close" type="button" class="close"
+                        data-dismiss="modal">&times;</button>
+                <div class="form-top">
+                    <div class="form-top-left">
+                        <h3>Login to our site</h3>
+                        <p>Enter username and password to log on:</p>
+                    </div>
+                    <div class="form-top-right">
+                        <i class="fa fa-lock"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="form-box">
+                    <div class="form-bottom">
+                        <form role="form" action="" method="post" class="login-form">
+                            <div id="email-group" class="form-group">
+                                <label class="sr-only" for="form-email">Email</label>
+                                <input type="text" name="form-email" placeholder="Email..." class="form-username form-control" id="form-mail">
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="form-password">Password</label>
+                                <input type="password" name="form-password" placeholder="Password..." class="form-password form-control" id="form-password">
+                            </div>
+                            <button type="button" id="form-signIn" name="form-signIn" class="btn">Sign in!</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="social-login">
+                    <h3>...or login with:</h3>
+                    <div class="social-login-buttons">
+                        <a class="btn btn-link-2" href="#">
+                            <i class="fa fa-facebook"></i> Facebook
+                        </a>
+                        <a class="btn btn-link-2" href="#">
+                            <i class="fa fa-twitter"></i> Twitter
+                        </a>
+                        <a class="btn btn-link-2" href="#">
+                            <i class="fa fa-google-plus"></i> Google Plus
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 
 </body>
 
 <!-- firebase -->
 <!-- firebase authentication -->
+
+<!-- firebase authentication -->
 <script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
+<script>
+
+        // Initialize Firebase
+        const config = {
+            apiKey: "AIzaSyBVujRzh16eLZq5zceOl53B6O8QS6mUbdY",
+            authDomain: "devicetracker-31792.firebaseapp.com",
+            databaseURL: "https://devicetracker-31792.firebaseio.com",
+            projectId: "devicetracker-31792",
+            storageBucket: "devicetracker-31792.appspot.com",
+            messagingSenderId: "799447247436"
+        };
+        firebase.initializeApp(config);
+
+        const formEmail = document.getElementById('form-mail');
+        const formPassword = document.getElementById('form-password');
+        const formSignIn = document.getElementById('form-signIn');
+        const auth = firebase.auth();
+
+        //sign out whoever is logged in first
+        firebase.auth().signOut().then(function() {
+            // Sign-out successful.
+        }, function(error) {
+            // An error happened.
+        });
+
+        //add event listener for sign in button
+        formSignIn.addEventListener('click', function (e) {
+            //get email and password
+            const email = formEmail.value;
+            const pass = formPassword.value;
+            const promise = auth.signInWithEmailAndPassword(email, pass).catch(function(error){
+                console.log(error.messsage);
+            });
+
+            promise.catch(function (){console.log(e.messsage)});
+
+            firebase.auth().onAuthStateChanged(function (firebaseUser) {
+                if (firebaseUser){
+//                    console.log(firebaseUser);
+                    //load the home page if logged in else show the error message
+                    //window.location.href = "../../../tracking.html";
+                    $("#close").trigger('click');
+                }else{
+                    // handle errors for email ---------------
+                    $('#email-group').addClass('has-error'); // add the error class to show red input
+                    $('#email-group').children('#error').remove();
+                    $('#email-group').append('<div id="error" class="help-block">' + 'Invalid user' + '</div>'); // add the actual error message under our input
+
+                }
+
+            })
+
+        });
+        //map code
+
+
+        var map, infoWindow;
+        var database = firebase.database();
+        var pos;
+        function initMap() {
+
+            firebase.auth().onAuthStateChanged(function (firebaseUser) {
+                if (firebaseUser) {
+                    console.log(firebaseUser.email);
+                    //load the home page if logged in else show the error message
+
+
+                    map = new google.maps.Map(document.getElementById('map'), {
+                        center: {lat: -34.397, lng: 150.644},
+                        zoom: 15
+                    });
+                    infoWindow = new google.maps.InfoWindow;
+
+                    // Try HTML5 geolocation.
+                    //    console.log(firebase.auth().currentUser);
+                    var coordinatesRef = firebase.database().ref('devices/' + firebaseUser.uid);
+                    coordinatesRef.on('value', function (snapshot) {
+
+                        pos = {
+                            lat: Number(snapshot.val().lat),
+                            lng: Number(snapshot.val().lng)
+
+                        };
+                        infoWindow.setPosition(pos);
+                        infoWindow.setContent('Location found.');
+                        infoWindow.open(map);
+                        map.setCenter(pos);
+                    });
+                }
+
+            });
+        }
+
+        // Try HTML5 geolocation.
+        //     if (navigator.geolocation) {
+        //         navigator.geolocation.getCurrentPosition(function(position) {
+        //             var pos = {
+        //                 lat: position.coords.latitude,
+        //                 lng: position.coords.longitude
+        //             };
+        //
+        //             infoWindow.setPosition(pos);
+        //             infoWindow.setContent('Location found.');
+        //             infoWindow.open(map);
+        //             map.setCenter(pos);
+        //         }, function() {
+        //             handleLocationError(true, infoWindow, map.getCenter());
+        //         });
+        //     } else {
+        //         // Browser doesn't support Geolocation
+        //         handleLocationError(false, infoWindow, map.getCenter());
+        //     }
+        // }
+
+        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+            infoWindow.setPosition(pos);
+            infoWindow.setContent(browserHasGeolocation ?
+                'Error: The Geolocation service failed.' :
+                'Error: Your browser doesn\'t support geolocation.');
+            infoWindow.open(map);
+        }
+
+</script>
 <script>
     // Get the element with id="defaultOpen" and click on it
     document.getElementById("defaultOpen").click();
@@ -329,13 +509,12 @@
     <!--  Google Maps Plugin    -->
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsbgOmmYLSxC6Nf9bqCFvQKtoEatcfDHA&callback=initMap"></script>
 <!-- script for the map-->
-    <script src="map.js"></script>
+    <!--<script src="map.js"></script>-->
 
 	<script type="text/javascript">
     	$(document).ready(function(){
-
+            $("#logoutBtn").trigger('click');
         	demo.initChartist();
-
         	$.notify({
             	icon: 'ti-gift',
             	message: "Welcome to <b>Paper Dashboard</b> - a beautiful Bootstrap freebie for your next project."
